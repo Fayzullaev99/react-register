@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import axios from '../api/axios'
 import { MdClose } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
+import { Link } from 'react-router-dom';
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -26,7 +27,6 @@ function SignUp() {
     const [errMsg, setErrMsg] = useState('')
     const [success, setSuccess] = useState(false)
 
-    console.log(matchPwd);
     useEffect(() => {
         userRef.current.focus()
     }, [])
@@ -93,7 +93,7 @@ function SignUp() {
                     <section>
                         <h1>Success!</h1>
                         <p>
-                            <a href="#">Sign In</a>
+                            <Link to="/signin">Sign In</Link>
                         </p>
                     </section>
                 ) : (
@@ -192,7 +192,7 @@ function SignUp() {
                         <p>
                             Already registered?<br />
                             <span className='line'>
-                                <a href="#">Sign In</a>
+                                <Link to="/signin">Sign In</Link>
                             </span>
                         </p>
                     </section>
