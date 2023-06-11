@@ -103,7 +103,7 @@ function SignUp() {
                             className={errMsg ? "errmsg" : "offscreen"}
                             aria-live='assertive'
                         >{errMsg}</p>
-                        <h1>Register</h1>
+                        <h1>Sign up</h1>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="username">
                                 Username:
