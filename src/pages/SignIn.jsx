@@ -2,12 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
+import useLocalStorage from '../hooks/useLocalStorage'
+import useInput from '../hooks/useInput'
+import useToggle from '../hooks/useToggle'
 
 const LOGIN_URL = '/auth'
 
 function SignIn() {
 
-    const { setAuth,persist, setPersist } = useAuth()
+    const { setAuth } = useAuth()
+    // const { setAuth,persist, setPersist } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
@@ -15,9 +19,12 @@ function SignIn() {
     const userRef = useRef()
     const errRef = useRef()
 
-    const [user, setUser] = useState('')
+    const [user, resetUser, userAttributes] = useInput('user','')
+    // const [user, setUser] = useLocalStorage('user','')
+    // const [user, setUser] = useState('')
     const [pwd, setPwd] = useState('')
     const [errMsg, setErrMsg] = useState('')
+    const [check, toggleCheck] = useToggle('persist',false)
 
     useEffect(() => {
         userRef.current.focus()
@@ -45,7 +52,8 @@ function SignIn() {
             const accessToken = response?.data?.accessToken
             const roles = response?.data?.roles
             setAuth({ user, pwd, roles, accessToken })
-            setUser("")
+            resetUser('')
+            // setUser("")
             setPwd("")
             navigate(from, { replace: true })
         } catch (error) {
@@ -62,13 +70,13 @@ function SignIn() {
         }
     }
 
-    const togglePersist = ()=>{
-        setPersist(prev => !prev)
-    }
+    // const togglePersist = ()=>{
+    //     setPersist(prev => !prev)
+    // }
 
-    useEffect(()=>{
-        localStorage.setItem("persist",persist)
-    },[persist])
+    // useEffect(()=>{
+    //     localStorage.setItem("persist",persist)
+    // },[persist])
     return (
         <>
             <section>
@@ -85,8 +93,7 @@ function SignIn() {
                         id='username'
                         ref={userRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        value={user}
+                        {...userAttributes}
                         required
                     />
                     <label htmlFor="password">Password:</label>
@@ -103,8 +110,8 @@ function SignIn() {
                         <input 
                             type="checkbox" 
                             id='persist'
-                            onChange={togglePersist}
-                            checked={persist}
+                            onChange={toggleCheck}
+                            checked={check}
                         />
                         <label htmlFor="persist">Trust This Device</label>
                     </div>
